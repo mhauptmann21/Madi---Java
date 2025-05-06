@@ -7,12 +7,12 @@ import javafx.stage.Stage;
 
 public class SafeHouse extends NormalLocation {
     private Stage stage;
-
-    public SafeHouse(Player player, Stage stage) {
+    
+    public SafeHouse(Player player, String string, Stage stage) {
         super(player, "Safe House", stage);
         this.stage = stage;
     }
-
+    
     @Override
     public boolean onLocation() {
         Platform.runLater(this::showSafeHouseScreen);
@@ -21,7 +21,7 @@ public class SafeHouse extends NormalLocation {
 
     private void showSafeHouseScreen() {
         VBox layout = new VBox(20);
-        layout.setStyle("-fx-padding: 20;");
+        layout.setStyle("-fx-padding: 20; -fx-alignment: left;");
 
         Label labelStatus = new Label("You are in a safe area. Your health has been restored.");
         labelStatus.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
@@ -40,7 +40,7 @@ public class SafeHouse extends NormalLocation {
 
     private void backToMainScreen() {
         VBox menu = new VBox(20);
-        menu.setStyle("-fx-padding: 20;");
+        menu.setStyle("-fx-padding: 20; -fx-alignment: left;");
         Label label = new Label("Where do you want to go next?");
         label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
@@ -51,7 +51,7 @@ public class SafeHouse extends NormalLocation {
         Button castleButton = new Button("Castle");
 
         safeHouseButton.setOnAction(e -> {
-            SafeHouse safeHouse = new SafeHouse(getPlayer(), stage);
+            SafeHouse safeHouse = new SafeHouse(getPlayer(), "Safe House", stage);
             safeHouse.onLocation();
         });
 
@@ -75,7 +75,7 @@ public class SafeHouse extends NormalLocation {
             castle.onLocation();
         });
 
-        menu.getChildren().addAll(label, safeHouseButton, shopButton, caveButton, castleButton);
+        menu.getChildren().addAll(label, safeHouseButton, shopButton, forestButton, caveButton, castleButton);
 
         Scene scene = new Scene(menu, 600, 400);
         stage.setScene(scene);

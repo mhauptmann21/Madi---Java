@@ -21,9 +21,12 @@ public class Shop extends NormalLocation {
 
     private void showShopMenu() {
         VBox menu = new VBox(15);
-        menu.setStyle("-fx-padding: 20;");
+        menu.setStyle("-fx-padding: 20; -fx-alignment: left;");
         Label title = new Label("Welcome to the Shop!");
         title.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+
+        Label moneyLabel = new Label("Money: " + getPlayer().getMoney());
+        moneyLabel.setStyle("-fx-font-size: 14px; -fx-text-fill: green;");
 
         Button weaponsButton = new Button("Weapons");
         Button armorButton = new Button("Armor");
@@ -35,7 +38,7 @@ public class Shop extends NormalLocation {
             backToMainScreen();
         });
 
-        menu.getChildren().addAll(title, weaponsButton, armorButton, exitButton);
+        menu.getChildren().addAll(title, moneyLabel, weaponsButton, armorButton, exitButton);
 
         Scene scene = new Scene(menu, 600, 400);
         stage.setScene(scene);
@@ -43,7 +46,7 @@ public class Shop extends NormalLocation {
 
     private void showWeapons() {
         VBox weaponsMenu = new VBox(15);
-        weaponsMenu.setStyle("-fx-padding: 20;");
+        weaponsMenu.setStyle("-fx-padding: 20; -fx-alignment: left;");
         Label label = new Label("Weapon List:");
         label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
@@ -73,7 +76,7 @@ public class Shop extends NormalLocation {
 
     private void showArmors() {
         VBox armorsMenu = new VBox(15);
-        armorsMenu.setStyle("-fx-padding: 20;");
+        armorsMenu.setStyle("-fx-padding: 20; -fx-alignment: left;");
         Label label = new Label("Armor List:");
         label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
@@ -103,7 +106,7 @@ public class Shop extends NormalLocation {
 
     private void showMessage(String message) {
         VBox messageBox = new VBox(15);
-        messageBox.setStyle("-fx-padding: 20;");
+        messageBox.setStyle("-fx-padding: 20; -fx-alignment: left;");
         Label msg = new Label(message);
         msg.setStyle("-fx-font-size: 16px;");
         Button okButton = new Button("OK");
@@ -117,7 +120,7 @@ public class Shop extends NormalLocation {
 
     private void backToMainScreen() {
         VBox mainMenu = new VBox(15);
-        mainMenu.setStyle("-fx-padding: 20;");
+        mainMenu.setStyle("-fx-padding: 20; -fx-alignment: left;");
         Label label = new Label("Where do you want to go next?");
         label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
@@ -128,7 +131,7 @@ public class Shop extends NormalLocation {
         Button castleButton = new Button("Castle");
 
         safeHouseButton.setOnAction(e -> {
-            NormalLocation safeHouse = new NormalLocation(getPlayer(), "Safe House", stage);
+            SafeHouse safeHouse = new SafeHouse(getPlayer(), "Safe House", stage);
             safeHouse.onLocation();
         });
 
@@ -138,12 +141,12 @@ public class Shop extends NormalLocation {
         });
 
         forestButton.setOnAction(e -> {
-            BattleLocation forest = new BattleLocation(getPlayer(), "Cave", new Zombie(), "Money", 3, stage);
+            BattleLocation forest = new BattleLocation(getPlayer(), "Forest", new Zombie(), "Money", 3, stage);
             forest.onLocation();
         });
 
         caveButton.setOnAction(e -> {
-            BattleLocation cave = new BattleLocation(getPlayer(), "Cave", new Zombie(), "Money", 3, stage);
+            BattleLocation cave = new BattleLocation(getPlayer(), "Cave", new Skeleton(), "Money", 3, stage);
             cave.onLocation();
         });
 
@@ -152,7 +155,7 @@ public class Shop extends NormalLocation {
             castle.onLocation();
         });
 
-        mainMenu.getChildren().addAll(label, safeHouseButton, shopButton, caveButton, castleButton);
+        mainMenu.getChildren().addAll(label, safeHouseButton, shopButton, forestButton, caveButton, castleButton);
 
         Scene scene = new Scene(mainMenu, 600, 400);
         stage.setScene(scene);

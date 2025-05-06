@@ -15,6 +15,7 @@ public class BattleLocation extends Location {
     private TextArea outputArea;
     private Button fightButton, runButton, attackButton, escapeButton;
     private int rndMonster;
+    private Label rewardLabel;
 
     public BattleLocation(Player player, String name, Monster monster, String award, int maxMonster, Stage stage) {
         super(player, name);
@@ -45,8 +46,10 @@ public class BattleLocation extends Location {
                 // Optional: Implement running behavior
                 backToMainScreen();
             });
+            rewardLabel = new Label(""); // Empty at first
+            rewardLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
 
-            layout.getChildren().addAll(outputArea, fightButton, runButton);
+            layout.getChildren().addAll(outputArea, rewardLabel, fightButton, runButton);
             Scene scene = new Scene(layout, 600, 400);
             stage.setScene(scene);
         });
@@ -100,6 +103,9 @@ public class BattleLocation extends Location {
         // Check if player or monster is dead
         if (this.getPlayer().getHealth() <= 0) {
             outputArea.appendText("You have been defeated...\n");
+            int reward = monster.getAward();
+            getPlayer().setMoney(getPlayer().getMoney() + reward);
+            rewardLabel.setText("You earned " + reward + " coins!");
             attackButton.setDisable(true);
             escapeButton.setDisable(true);
         } else if (this.getMonster().getHealth() <= 0) {
@@ -110,8 +116,9 @@ public class BattleLocation extends Location {
             attackButton.setDisable(true);
             escapeButton.setDisable(true);
 
-            // Optionally: move to next monster or finish
-            backToMainScreen();
+            Button continueButton = new Button("Continue");
+            continueButton.setOnAction(ev -> backToMainScreen());
+            layout.getChildren().add(continueButton);
         }
     }
 
@@ -121,6 +128,7 @@ public class BattleLocation extends Location {
         outputArea.appendText("Health: " + this.getPlayer().getHealth() + "\n");
         outputArea.appendText("Attack Power: " + this.getPlayer().getTotalDamage() + "\n");
         outputArea.appendText("Defense Power: " + this.getPlayer().getInventory().getArmor().getBlock() + "\n");
+        outputArea.appendText("Money: " + getPlayer().getMoney());
     }
 
     public void monsterStatus() {
@@ -138,7 +146,7 @@ public class BattleLocation extends Location {
     public void backToMainScreen() {
         Platform.runLater(() -> {
             VBox mainMenu = new VBox(15);
-            mainMenu.setStyle("-fx-padding: 20;");
+            mainMenu.setStyle("-fx-padding: 20; -fx-alignment: left;");
             Label label = new Label("Where do you want to go next?");
             label.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
     
@@ -164,12 +172,12 @@ public class BattleLocation extends Location {
             });
 
             forestButton.setOnAction(e -> {
-                BattleLocation forest = new BattleLocation(getPlayer(), "Cave", new Zombie(), "Money", 3, stage);
+                BattleLocation forest = new BattleLocation(getPlayer(), "Forest", new Zombie(), "Money", 3, stage);
                 forest.onLocation();
             });
     
             caveButton.setOnAction(e -> {
-                BattleLocation cave = new BattleLocation(getPlayer(), "Cave", new Zombie(), "Money", 3, stage);
+                BattleLocation cave = new BattleLocation(getPlayer(), "Cave", new Skeleton(), "Money", 3, stage);
                 cave.onLocation();
             });
     
@@ -178,7 +186,7 @@ public class BattleLocation extends Location {
                 castle.onLocation();
             });
     
-            mainMenu.getChildren().addAll(label, safeHouseButton, shopButton, caveButton, castleButton);
+            mainMenu.getChildren().addAll(label, safeHouseButton, shopButton, forestButton, caveButton, castleButton);
     
             Scene scene = new Scene(mainMenu, 600, 400);
             stage.setScene(scene);
