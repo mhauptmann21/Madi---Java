@@ -30,6 +30,7 @@ public class BattleLocation extends Location {
         Platform.runLater(() -> {
             rndMonster = this.randomMonsterNumber();
             layout = new VBox(10);
+            layout.setStyle("-fx-padding: 20; -fx-alignment: left;");
             outputArea = new TextArea();
             outputArea.setEditable(false);
             fightButton = new Button("Fight");
